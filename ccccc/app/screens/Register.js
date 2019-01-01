@@ -18,16 +18,8 @@ import {
 } from 'react-native';
 //import { createStackNavigator} from 'react-navigation';
 import styles from '../style/style';
-// const fs = require('fs');
-// const content = JSON.stringify(getUser());
-// fs.writeFile('H:/', content, 'utf-8',function (err) {
-//     if (err) {
-//         return console.log(err);
-//     }
+import deviceStorage from '../src/deviceStorage';
 
-//     console.log("The file was saved!");
-// }); 
-//const serverURL = 'http://192.168.198.2/api/register';
 const DismissKeyboard = ({children}) => (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         {children}
@@ -41,7 +33,6 @@ export default class Register extends Component {
         this.state = {
             userName: '',
             password: '',
-            confirmPassword: '',
             message: '',
             token: ''
         }
@@ -50,49 +41,15 @@ export default class Register extends Component {
         BG = require('../images/BG.png');
     }
 
-    // componentDidMount(){
-    //     return fetch('https://facebook.github.io/react-native/movies.json')
-    //       .then((response) => response.json())
-    //       .then((responseJson) => {
-    
-    //         this.setState({
-    //           isLoading: false,
-    //           dataSource: responseJson.movies,
-    //         }, function(){
-    
-    //         });
-    
-    //       })
-    //       .catch((error) =>{
-    //         console.error(error);
-    //       });
-    //   }
-    //  _keyExtractor = (item, index) => (item._id);
-        
-    getMoviesFromApiAsync() {
-        return fetch('https://facebook.github.io/react-native/movies.json')
-          .then((response) => response.json())
-          .then((responseJson) => {
-    
-            this.setState({
-              isLoading: false,
-              dataSource: responseJson.movies,
-            }, function(){
-    
-            });
-    
-          })
-          .catch((error) =>{
-            console.error(error);
-          });
-        }
-        
-
-        newUser (){
-            var serverURL = '192.168.1.6:8080/user/register';
-            var userName = this.state.userName;
-            var password = this.state.password;
-            //alert(serverURL + userName + password);
+    componentDidMount(){
+        alert("XXXXXXXXXX")
+    }
+        newUser = (()=>{
+            const serverURL = 'https://storyap.herokuapp.com/user/register';
+            let user = this.state.userName;
+            let pass = this.state.password;
+            alert(serverURL +"-"+ user +"-"+ pass);
+            
             //check in here
             fetch(serverURL,{
                     method: 'POST',
@@ -101,70 +58,44 @@ export default class Register extends Component {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({
-                        "name": userName,
-                        "pass": password,
+                        "name": this.state.userName,
+                        "pass": this.state.password,
                         
                     })
                 }).then((response)=>{
-                    alert(response.json());
-                    
+                    response.json();
                 }).then((responseJSON)=>{
                     this.setState({
                         token: responseJSON.token,
                         idUser: responseJson.idUser,
                         name: responseJson.name
                       }, function(){
-                          if(responseJSON !== null){
-                            var { navigate } = this.props.navigation;
-                            setTimeout(() => {
-                                navigate('App', null);
-                              }, 1000);
-                          }
-                            
+                        //   if(responseJSON !== null){
+                        //     var { navigate } = this.props.navigation;
+                        //     setTimeout(() => {
+                        //         navigate('App', null);
+                        //       }, 1000);
+                        //   }
+                        //alert("Register successful !! token : " + this.state.token);    
                       });
-                      
-                   
+                      //deviceStorage.saveItem("token",responseJSON.token);
                 }).catch((error)=>{
-                    console.warn(error)
+                    console.warn(error);
                 });
-        }
-
-        getUser = (()=>{
-            return fetch('http://10.0.137.107/contacts')
-            .then((response) => response.json())
-            .then((responseJson) => {
-    
-            this.setState({
-              isLoading: false,
-              data: responseJson.data,
-            }, function(){
-    
-            });
-    
-          })
-          .catch((error) =>{
-            console.error(error);
-          });
-        })
+                //alert(this.state.token);
+        });
 
         _onPressCancel=(()=>{
             this.props.navigation.navigate('Login');
         })
     
-        _onChangeTextuser = ((username) => {
-            this.setState({userName : username});
+        _onChangeTextuser = ((user) => {
+            this.setState({userName : user});
         })
     
-        _onChangeTextpass = ((password) => {
-            this.setState({password : password});
+        _onChangeTextpass = ((pass) => {
+            this.setState({password : pass});
         })
-
-        _onChangeConfirm_pass = ((pass_confirm) => {
-            this.setState({confirmPassword : pass_confirm});
-        })
-
-        
-    
 
     render(){
         
@@ -194,42 +125,25 @@ export default class Register extends Component {
                                     placeholder='Type password...'
                                 />
 
-                                {/* <TextInput 
-                                    onChangeText={this._onChangeConfirm_pass}
-                                    secureTextEntry={true}
-                                    style={styles.textinput}
-                                    placeholder='Type confirm password...'
-                                /> */}
+                        
                             
                             </View>
                             <View style={styles.ButtonRegister}>
                                 <TouchableOpacity
                                     style={styles.button}
-                                    //onPress={this.newUser}
-                                    onPress={this.newUser()}
+                                    onPress={this.newUser}
                                     >
                                     <Text> Register </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
                                     style={styles.button}
                                     keyboardShouldPersistTaps={true}
-                                    //onPress= {this.getUser}
                                     onPress={this._onPressCancel}
                                 >
                                     <Text> Cancel </Text>
                                 </TouchableOpacity>
                                 
                             </View>
-                            {/* <View style={{flex: 1, paddingTop:20}}>
-                                <Text>{this.state.message}</Text>
-                            </View> */}
-                            {/* <View style={{flex: 1, paddingTop:20}}>
-                                <FlatList
-                                data={this.state.dataSource}
-                                renderItem={({item}) => <Text>{item.title}, {item.releaseYear}</Text>}
-                                keyExtractor={({id}, index) => id}
-                                />
-                            </View> */}
                         </View>
                     </View>
                 </DismissKeyboard>                

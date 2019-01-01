@@ -28,8 +28,8 @@ const DismissKeyboard = ({children}) => (
 );
 
 const user = {
-    username: 'TuAnh',
-    pass: '12345678'
+    name: 'tuanh001',
+    pass: 'tuanh001'
 }
 const conf = {
     headers: {
@@ -50,7 +50,8 @@ export default class VerticalScrollView extends Component {
             sour: '',
             token: '',
             idUser: '',
-            name: ''
+            name: '',
+            responseLogin: ''
         }
         showPass = require('../images/show_pass.png');
         hidePass = require('../images/hide_pass.png');
@@ -59,91 +60,53 @@ export default class VerticalScrollView extends Component {
         BG = require('../images/BG.png');
     }
 
-    // _onShowHidePass = (() => {
-    //      this.setState({show_hide_pass : !show_hide_pass})
-        
-    // })
-
-    // sor = (()=>{
-    //     this.state.show_hide_pass ? (this.setState = ({sour : showPass})) : (this.setState = ({sour : hidePass}))
-
-    // })
-    
     _onPressLogin = (() => {
-        // let url = '192.168.137.197:8080/user/login';
-        // let name = "tuanh003";
-        // let pass = "Monday-03";
-        // var user = {
-        //     name:"tuanh003",
-        //     pass:"Monday-03"
-        // }
-        //alert(name + '--' + pass)
-        //console.log(`${name} + '--' + ${pass}`)
-        // fetch('192.168.198.2:8080/user/login',{
-        //     method: 'POST',
-        //     headers: {
-        //         //'Accept':'application/json',
-        //         'Content-Type':'application/json'
-        //     },
-        //     // body: JSON.stringify({
-        //     //     // name: `${name}`,
-        //     //     // pass: `${pass}`
-        //     //     name: 'tuanh003',
-        //     //     pass: 'Monday-03'
-        //     // })
-        //     Body: JSON.stringify(user)
-            
-        // }).then((response) => {
-        //     //console.log("get response !!!");
-        //     response.json()
-        // })
-        //   .then((responseJson) => {
-        //       //console.log("parsed to json");
-        //       let data = responseJson;
-        //       if(data === null){
-        //         alert("username or password wrong !!");
-        //     } else {
-        //         this.setState({
-        //             token: data.token,
-        //             idUser: data.idUser,
-        //             name: data.name,
-        //           })
-        //           alert(`user ${name} login successful !!`);
-        //            let Page_url = 'App';
-        //            this.props.navigation.navigate(Page_url);
-        //     }
-        //   })
-        //   .catch((error) =>{
-        //     console.error(error);
-        //   });
-        var user = {
-            name: this.state.name,
-            pass: this.state.password
-          };
-        var use = {
-            name: "tuanh001",
-            pass: "tuanh001"
-        }
-        axios.post('192.168.198.2:8080/user/login',{ use })
-        .then(res => {
-            //console.log(res);
-            //console.log(res.data);
-            // if(res.data !== null){
-            //     let Page_url = 'App';
-            //     this.props.navigation.navigate(Page_url);
-            // } else {
-            //     alert("login failed !!")
-            // }
-            var txtFile = "c:/test.txt";
-            var file = new File(txtFile);
-            var str = res.data.token;
+        let url = 'https://storyap.herokuapp.com/user/login';
+        // let user1 = {
 
-            file.open("w"); // open file with write access
-            file.writeln("First line of text");
-            file.writeln("Second line of text " + str);
-            file.write(str);
-            file.close();
-        })
+        //     "name": "sunsu005",
+        //     "pass": "s005"
+            
+        // }
+        alert(url)
+        fetch(url,{
+            method: 'POST',
+            headers: {
+                'Content-Type':'application/json'
+            },
+            
+            body: JSON.stringify({
+                "name": this.state.user,
+                "pass": this.state.password,
+                
+            })
+            
+        }).then((response) => {
+            response.json()
+        }).then((responseJson) => {
+            let data = responseJson;
+            // this.setState({
+            //     responseLogin: responseJson,
+            //     token: data.token,
+            //     idUser: data.idUser,
+            //     name: data.name,
+            //   })
+            
+            if(data === null || data === undefined){
+                alert('username or pass wrong !!');
+            } else{
+                alert('user login successful !!');
+                const {navigate} = this.props.navigation;
+                setTimeout(() => {
+                    navigate('App', null);
+                }, 1000); 
+                //deviceStorage.saveItem("token",responseJSON.token);
+            } 
+          })
+          .catch((error) =>{
+            console.error(error);
+          });
+          //alert(this.state.token);
     })
 
     _onChangeTextuser = ((username) => {
@@ -202,10 +165,10 @@ export default class VerticalScrollView extends Component {
                                     secureTextEntry={true}
                                     style={styles.button}
                                     onPress= {()=>{
-                                        let pageUrl = 'Register';
+                                        //let pageUrl = 'Register';
                                         const {navigate} = this.props.navigation;
                                         setTimeout(() => {
-                                            navigate(pageUrl, null);
+                                            navigate('Register', null);
                                         }, 100);
                                         //alert('move to register screen !!')
                                     }}

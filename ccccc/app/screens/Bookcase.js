@@ -25,35 +25,30 @@ export default class Boookcase extends Component {
     }
     BG = require('../images/bg1.jpg');
     BGR = require('../images/background-row.jpg');
+    BGW = require('../images/wood_background.jpg');
   }
 
   componentDidMount(){
-        //var url = 'http://192.168.1.4:8080/book';
-        fetch('http://192.168.1.4:8080/book',{
-            method: 'GET',
-            headers: {
-                'Authorization':'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiI1YmY5MjFjNDQ2YzBlYTM5ZTJkMWFjYjYiLCJjcmVhdGVBdCI6MTU0NTIzNDI5NX0.c3HmlMQdotPmCKIKp8QX2Y4e2FiSRvwJ5aiCLkB8p4k',
-                'Content-Type':"application/json;charset=UTF-8"
-            },
-        }).then((response) => {
-            console.log("get response !!!");
-            response.json()
-        }).then((responseJson) => {
-              console.log("parsed to json");
-              let data = responseJson;
-              if(data === null){
-                alert("username or password wrong !!");
-            } else {
-                this.setState({
-                    listbook: responseJson
-                  })
-                  //  let Page_url = 'App';
-                  //  this.props.navigation.navigate(Page_url);
-            }
-          })
-          .catch((error) =>{
-            console.error(error);
-          });
+    return fetch('https://storyap.herokuapp.com/book',{
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
   }
 
   openDetail = (data) => {
@@ -61,15 +56,13 @@ export default class Boookcase extends Component {
       data: data
     });
   };
-  _renderItem = ({item, index}) => (
+  _renderItem = ({item}) => (
     <BookcaseItem
-      //index = {index + 1}
-      //id={item.id}
-      //passdata = {item.title}
-      //title={'Magic Stories'}
-      //author={item.author}
+      id={item.id}
+      // tensach={item.tensach}
       thumbnail={item.image}
-      openDetail={()=> this.openDetail(passdata)}
+      // image={item.image}
+      // detai={item.fielpdf}
     />
   );
 
@@ -79,7 +72,7 @@ export default class Boookcase extends Component {
 
   render() {
     return (
-      <ImageBackground source={BG} style={{flex: 1, resizeMode:'stretch', width: Dimensions.get('window').width}}>
+      <ImageBackground source={BGW} style={{flex: 1, resizeMode:'stretch', width: Dimensions.get('window').width}}>
       <ScrollView  style={styles.container}>
         {/* <SearchBar
           showLoading
@@ -88,18 +81,16 @@ export default class Boookcase extends Component {
         <StatusBar
           barStyle="light-content"
         /> */}
+            <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
+              <FlatList
+                horizontal
+                data={this.state.dataSource}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem}
+              />
+
+          {/*    
           <ImageBackground source={BGR} style={styles.TypeStory}>
-            
-              <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
-                <FlatList
-                  horizontal
-                  data={this.state.listbook}
-                  keyExtractor={this._keyExtractor}
-                  renderItem={this._renderItem}
-                />
-            
-          </ImageBackground>
-          {/* <ImageBackground source={BGR} style={styles.TypeStory}>
             
               <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
                 <FlatList
@@ -109,7 +100,8 @@ export default class Boookcase extends Component {
                   renderItem={this._renderItem}
                 />
             
-          </ImageBackground>
+          </ImageBackground> */}
+          {/*
           <ImageBackground source={BGR} style={styles.TypeStory}>
             
               <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
@@ -132,7 +124,13 @@ export default class Boookcase extends Component {
                 />
             
           </ImageBackground> */}
-        
+          {/* <View style={{flex: 1, paddingTop:20}}>
+            <FlatList
+              data={this.state.dataSource}
+              renderItem={({item}) => <Text>{item.image}</Text>}
+              keyExtractor={({id}, index) => id}
+            />
+          </View> */}
       </ScrollView>
       </ImageBackground>
     );

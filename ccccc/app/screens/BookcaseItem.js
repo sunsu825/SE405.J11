@@ -19,6 +19,7 @@ export default class BookcaseItem extends Component {
 
   _onPress = () => {
     let id = this.props.id;
+    let fielpdf = this.props.detail;
     this.props.navigation.navigate('Detail', {id:id})
   }
 
@@ -32,10 +33,10 @@ export default class BookcaseItem extends Component {
               <View style={styles.rowContainer}>
               {/* <View style={styles.rowText}>
                   <Text style={styles.title} numberOfLines={2} ellipsizeMode ={'tail'}>
-                    {this.props.title}
+                    {this.props.thumbnail}
                   </Text>
               </View> */}
-                <Image source={{uri: this.props.image}}
+                <Image source={{uri: this.props.thumbnail}}
                 style={styles.thumbnail}
                 resizeMode="cover" />
                 {/* <View style={styles.rowText}>
@@ -102,6 +103,9 @@ const styles = StyleSheet.create({
   },
   thumbnail: {
     flex: 1,
+    borderRadius: 5,
+    marginLeft: 3,
+    marginRight: 3
     //height: undefined,
     //width: undefined
   },
