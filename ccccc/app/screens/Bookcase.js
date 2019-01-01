@@ -81,26 +81,53 @@ export default class Boookcase extends Component {
         <StatusBar
           barStyle="light-content"
         /> */}
-            <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
+        <View style={styles.TypeStory}>
+          <Text style={{marginTop:17, fontWeight:'bold', fontSize:26, color: '#F4F6F6'}}>Most Popular Stories</Text>
+                <FlatList
+                  horizontal
+                  data={this.state.dataSource}
+                  keyExtractor={this._keyExtractor}
+                  renderItem={this._renderItem}
+                />
+        </View>
+            
+
+             
+          <View style={styles.TypeStory}>
+            
+              <Text style={{marginTop:17, fontWeight:'bold', fontSize:26, color: '#F4F6F6'}}>Favorite Stories</Text>
+                <FlatList
+                  horizontal
+                  data={this.state.dataSource}
+                  keyExtractor={this._keyExtractor}
+                  renderItem={this._renderItem}
+                />
+            
+          </View>
+
+          <View style={styles.TypeStory}>
+            
+            <Text style={{marginTop:17, fontWeight:'bold', fontSize:26, color: '#F4F6F6'}}>Hot Stories</Text>
               <FlatList
                 horizontal
                 data={this.state.dataSource}
                 keyExtractor={this._keyExtractor}
                 renderItem={this._renderItem}
               />
+          
+        </View>
 
-          {/*    
-          <ImageBackground source={BGR} style={styles.TypeStory}>
+        <View style={styles.TypeStory}>
             
-              <Text style={{marginTop:17, fontWeight:'bold', fontSize:16}}>Most Stories</Text>
-                <FlatList
-                  horizontal
-                  data={Books}
-                  keyExtractor={this._keyExtractor}
-                  renderItem={this._renderItem}
-                />
-            
-          </ImageBackground> */}
+            <Text style={{marginTop:17, fontWeight:'bold', fontSize:26, color: '#F4F6F6'}}>Most See Stories</Text>
+              <FlatList
+                horizontal
+                data={this.state.dataSource}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem}
+              />
+          
+        </View>
           {/*
           <ImageBackground source={BGR} style={styles.TypeStory}>
             
